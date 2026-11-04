@@ -9,3 +9,4 @@ All write-ups are anonymized. Hostnames, user names, and organizations are remov
 | # | Problem | Area | Date |
 |---|---------|------|------|
 | 1 | [Scan to folder over SMB fails with error #751](scan-to-smb-folder-error-751.md) | Windows file sharing, SMB and NTFS ACLs | 2026-10 |
+| 2 | [Incoming calls don't ring the office DECT phones after a SIP-trunk migration](dect-phones-not-ringing-after-sip-migration.md) | VoIP telephony, SIP trunk and DECT on FRITZ!Box | 2026-11 |
