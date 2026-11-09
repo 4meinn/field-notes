@@ -73,6 +73,10 @@ Saving the trunk on the second box is the switch: because the trunk allows only 
 
 Verification, in order: the numbers go green on the second box; a test call from a mobile to an extension rings the right handset; and the main box's copy is removed only after the second box is confirmed working, so the original stays as a fallback until the end.
 
+## Outcome
+
+The telephony has run reliably since the change; the operator confirmed the intermittent failures have not recurred.
+
 ## Remediation and hardening
 
 - **Back up both boxes before and after.** The incident was only recoverable because the working trunk could be read off the main box field by field. A saved FRITZ!OS config export of each box turns that into a restore instead of a reverse-engineering job.
