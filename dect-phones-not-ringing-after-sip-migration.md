@@ -75,7 +75,7 @@ Verification, in order: the numbers go green on the second box; a test call from
 
 ## Outcome
 
-The telephony has run reliably since the change; the operator confirmed the intermittent failures have not recurred.
+The fix held for five days of normal use. The fault then recurred, so the root cause was deeper than the duplicate registration alone — see the Update below.
 
 ## Remediation and hardening
 
@@ -88,3 +88,16 @@ The telephony has run reliably since the change; the operator confirmed the inte
 ## Key takeaway
 
 "Everything is online" is not the same as "a phone can ring." The call log proved only that calls reached the router; it said nothing about whether any handset could receive them — and that gap *was* the fault. The problem was not a dead device or a DECT pairing glitch but an architecture left half-migrated: numbers on one box, handsets on another. The fix was to put the two halves back together on the box where the phones physically live, by copying the known-good trunk config rather than guessing, and to keep the working side as a fallback until the new side was proven. When the symptom points at the endpoints but the endpoints check out, step back and look at where the pieces actually live.
+
+## Update: the fault recurred (root cause still open)
+
+Five days after the fix the telephony failed again. The box hosting the trunk showed a red **Info** LED (the box flagging an internal error), calls stopped, and power-cycling that box restored service — which, as before, is symptom-level recovery, not a fix. The failure-time logs were not captured before the reboot, so the direct evidence is still missing.
+
+Two candidate causes remain, separated by one check:
+
+- **The duplicate registration returned.** If the trunk was re-added on the main box (by a person, a restored backup, or a carrier-side re-provision), the two boxes contend again. Immediate check: the main box's *Own numbers* list must be empty. If numbers are back there, that is the cause.
+- **Architectural fragility.** The trunk is hosted on a box running as an IP client *behind* the main router, so its SIP reaches the carrier through that router. If the uplink or its NAT state blips, the single-registration trunk can drop and not re-register on its own until the box is restarted. The red Info LED is consistent with a dropped registration the box could not recover.
+
+Root cause is therefore **not yet confirmed**. The next failure must be captured before rebooting: the overview-page warning text and the telephony event log at the moment of failure; enabling the box's push-service email export would deliver that log automatically. If the architectural cause is confirmed, the durable direction is to host the trunk on the box that terminates the line and attach the handsets to it as a DECT repeater or IP-client extension, rather than running the trunk one hop downstream. That is a change to a live line and belongs with whoever owns the carrier contract.
+
+Lesson for the record: removing a confirmed cause is not proven until it survives the real workload over time. This one looked solved for five days and was not. "Confirmed working" means confirmed to stay working.
